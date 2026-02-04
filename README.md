@@ -77,6 +77,9 @@ npm start
 # Créer un utilisateur
 node ace user:create <username> <password>
 
+# Supprimer un utilisateur
+node ace user:delete <username>
+
 # Lancer les migrations
 node ace migration:run
 
