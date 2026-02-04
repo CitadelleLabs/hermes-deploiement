@@ -25,7 +25,9 @@ export default class PluginsService {
       if (item.isFile && item.name.endsWith('.jar')) {
         const key = (item as any).key as string
         const pathParts = key.split('/')
-        const category = pathParts.length > 1 ? pathParts[0] : 'other'
+        const category = pathParts.length > 1 
+          ? pathParts.slice(0, -1).join('/') 
+          : 'root'
         jarFiles.push({ key, name: item.name, category })
       }
     }

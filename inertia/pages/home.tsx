@@ -92,7 +92,9 @@ export default function Home({ plugins }: HomeProps) {
                     <div className="space-y-3">
                       {recentPlugins.map((plugin) => {
                         const parts = plugin.path.split('/')
-                        const category = parts.length > 1 ? parts[0] : 'autres'
+                        const category = parts.length > 1 
+                          ? parts.slice(0, -1).join('/')
+                          : 'root'
                         const fileName = plugin.name.replace('.jar', '')
 
                         return (
