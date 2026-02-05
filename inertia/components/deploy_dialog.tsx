@@ -1,5 +1,5 @@
 import { router, usePage } from '@inertiajs/react'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Button } from '~/components/ui/button'
 import {
   Dialog,
@@ -11,8 +11,17 @@ import {
   DialogTrigger,
 } from '~/components/ui/dialog'
 import { Checkbox } from '~/components/ui/checkbox'
-import { RocketIcon, ServerIcon } from 'lucide-react'
+import { RocketIcon, ServerIcon, Search } from 'lucide-react'
 import { Alert, AlertDescription } from '~/components/ui/alert'
+import { Input } from '~/components/ui/input'
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from '~/components/ui/pagination'
 
 type Server = {
   id: number
@@ -33,9 +42,30 @@ export function DeployDialog({ pluginPath, pluginName, children }: DeployDialogP
   const [open, setOpen] = useState(false)
   const [selectedServers, setSelectedServers] = useState<number[]>([])
   const [deploying, setDeploying] = useState(false)
+  const [searchQuery, setSearchQuery] = useState('')
+  const [currentPage, setCurrentPage] = useState(1)
   const [deploymentStatus, setDeploymentStatus] = useState<{
     [serverId: number]: 'pending' | 'success' | 'error'
   }>({})
+
+  const SERVERS_PER_PAGE = 5
+
+  const filteredServers = servers.filter((server) => {
+    const query = searchQuery.toLowerCase()
+    return (
+      server.name.toLowerCase().includes(query) ||
+      server.serverId.toLowerCase().includes(query)
+    )
+  })
+
+  const totalPages = Math.ceil(filteredServers.length / SERVERS_PER_PAGE)
+  const startIndex = (currentPage - 1) * SERVERS_PER_PAGE
+  const endIndex = startIndex + SERVERS_PER_PAGE
+  const paginatedServers = filteredServers.slice(startIndex, endIndex)
+
+  useEffect(() => {
+    setCurrentPage(1)
+  }, [searchQuery])
 
   const toggleServer = (serverId: number) => {
     setSelectedServers((prev) =>
@@ -111,7 +141,26 @@ export function DeployDialog({ pluginPath, pluginName, children }: DeployDialogP
             </Alert>
           ) : (
             <div className="space-y-3">
-              {servers.map((server) => (
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                <Input
+                  placeholder="Rechercher par nom ou ID..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="pl-9"
+                />
+              </div>
+              {filteredServers.length === 0 ? (
+                <Alert>
+                  <ServerIcon className="h-4 w-4" />
+                  <AlertDescription>
+                    Aucun serveur ne correspond à votre recherche.
+                  </AlertDescription>
+                </Alert>
+              ) : (
+                <>
+                  <div className="space-y-2">
+                    {paginatedServers.map((server) => (
                 <div
                   key={server.id}
                   className="flex items-center space-x-3 rounded-lg border p-3 hover:bg-accent transition-colors"
@@ -144,7 +193,39 @@ export function DeployDialog({ pluginPath, pluginName, children }: DeployDialogP
                     <span className="text-xs text-red-500">✗ Erreur</span>
                   )}
                 </div>
-              ))}
+                    ))}
+                  </div>
+                  {totalPages > 1 && (
+                    <Pagination className="mt-4">
+                      <PaginationContent>
+                        <PaginationItem>
+                          <PaginationPrevious
+                            onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
+                            className={currentPage === 1 ? 'pointer-events-none opacity-50' : 'cursor-pointer'}
+                          />
+                        </PaginationItem>
+                        {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                          <PaginationItem key={page}>
+                            <PaginationLink
+                              onClick={() => setCurrentPage(page)}
+                              isActive={currentPage === page}
+                              className="cursor-pointer"
+                            >
+                              {page}
+                            </PaginationLink>
+                          </PaginationItem>
+                        ))}
+                        <PaginationItem>
+                          <PaginationNext
+                            onClick={() => setCurrentPage((prev) => Math.min(totalPages, prev + 1))}
+                            className={currentPage === totalPages ? 'pointer-events-none opacity-50' : 'cursor-pointer'}
+                          />
+                        </PaginationItem>
+                      </PaginationContent>
+                    </Pagination>
+                  )}
+                </>
+              )}
             </div>
           )}
         </div>

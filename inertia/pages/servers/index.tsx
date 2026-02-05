@@ -56,7 +56,6 @@ export default function Servers({ servers, pagination }: ServersProps) {
     const items = []
     const { currentPage, lastPage } = pagination
 
-    // Toujours afficher la première page
     items.push(
       <PaginationItem key={1}>
         <PaginationLink
@@ -68,12 +67,10 @@ export default function Servers({ servers, pagination }: ServersProps) {
       </PaginationItem>
     )
 
-    // Ellipsis après la première page si nécessaire
     if (currentPage > 3) {
       items.push(<PaginationEllipsis key="ellipsis-1" />)
     }
 
-    // Pages autour de la page courante
     for (let i = Math.max(2, currentPage - 1); i <= Math.min(lastPage - 1, currentPage + 1); i++) {
       items.push(
         <PaginationItem key={i}>
@@ -87,12 +84,10 @@ export default function Servers({ servers, pagination }: ServersProps) {
       )
     }
 
-    // Ellipsis avant la dernière page si nécessaire
     if (currentPage < lastPage - 2) {
       items.push(<PaginationEllipsis key="ellipsis-2" />)
     }
 
-    // Toujours afficher la dernière page si elle est différente de la première
     if (lastPage > 1) {
       items.push(
         <PaginationItem key={lastPage}>
