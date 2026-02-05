@@ -103,15 +103,15 @@ export default function Home({ plugins }: HomeProps) {
                             className="flex items-center justify-between p-3 border rounded-lg hover:bg-accent transition-colors"
                           >
                             <div className="flex items-center gap-3 flex-1">
-                              <div className="flex items-center gap-2 text-muted-foreground text-sm">
-                                <FolderIcon className="h-4 w-4" />
-                                <span className="capitalize">{category}</span>
-                              </div>
                               <div className="flex-1">
                                 <p className="font-medium">{fileName}</p>
                                 <p className="text-sm text-muted-foreground">
                                   {formatSize(plugin.size)} • {formatDate(plugin.lastModified)}
                                 </p>
+                                <div className="flex items-center gap-2 text-muted-foreground text-sm">
+                                <FolderIcon className="h-4 w-4" />
+                                <span className="capitalize">{category}</span>
+                              </div>
                               </div>
                             </div>
                             <DeployDialog pluginPath={plugin.path} pluginName={fileName} />
