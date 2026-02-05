@@ -5,6 +5,10 @@ export default class ServersService {
     return await Server.all()
   }
 
+  async getPaginatedServers(page: number = 1, perPage: number = 10) {
+    return await Server.query().paginate(page, perPage)
+  }
+
   async createServer(data: { name: string; serverId: string }): Promise<Server> {
     const server = await Server.create({
       name: data.name,

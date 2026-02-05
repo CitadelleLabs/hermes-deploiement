@@ -6,6 +6,15 @@ import { Button } from '~/components/ui/button'
 import { Separator } from '~/components/ui/separator'
 import { ServerIcon, TrashIcon } from 'lucide-react'
 import { AddServerDialog } from './components/add_server'
+import { 
+  Pagination, 
+  PaginationContent, 
+  PaginationItem, 
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+  PaginationEllipsis
+} from '~/components/ui/pagination'
 
 type Server = {
   id: number
@@ -15,15 +24,89 @@ type Server = {
   updatedAt: string
 }
 
-type ServersProps = {
-  servers: Server[]
+type PaginationMeta = {
+  total: number
+  perPage: number
+  currentPage: number
+  lastPage: number
+  firstPage: number
+  firstPageUrl: string
+  lastPageUrl: string
+  nextPageUrl: string | null
+  previousPageUrl: string | null
 }
 
-export default function Servers({ servers }: ServersProps) {
+type ServersProps = {
+  servers: Server[]
+  pagination: PaginationMeta
+}
+
+export default function Servers({ servers, pagination }: ServersProps) {
   const handleDelete = (id: number) => {
     if (confirm('Êtes-vous sûr de vouloir supprimer ce serveur ?')) {
       router.delete(`/servers/${id}`)
     }
+  }
+
+  const handlePageChange = (page: number) => {
+    router.get('/servers', { page }, { preserveState: true })
+  }
+
+  const renderPaginationItems = () => {
+    const items = []
+    const { currentPage, lastPage } = pagination
+
+    // Toujours afficher la première page
+    items.push(
+      <PaginationItem key={1}>
+        <PaginationLink
+          onClick={() => handlePageChange(1)}
+          isActive={currentPage === 1}
+        >
+          1
+        </PaginationLink>
+      </PaginationItem>
+    )
+
+    // Ellipsis après la première page si nécessaire
+    if (currentPage > 3) {
+      items.push(<PaginationEllipsis key="ellipsis-1" />)
+    }
+
+    // Pages autour de la page courante
+    for (let i = Math.max(2, currentPage - 1); i <= Math.min(lastPage - 1, currentPage + 1); i++) {
+      items.push(
+        <PaginationItem key={i}>
+          <PaginationLink
+            onClick={() => handlePageChange(i)}
+            isActive={currentPage === i}
+          >
+            {i}
+          </PaginationLink>
+        </PaginationItem>
+      )
+    }
+
+    // Ellipsis avant la dernière page si nécessaire
+    if (currentPage < lastPage - 2) {
+      items.push(<PaginationEllipsis key="ellipsis-2" />)
+    }
+
+    // Toujours afficher la dernière page si elle est différente de la première
+    if (lastPage > 1) {
+      items.push(
+        <PaginationItem key={lastPage}>
+          <PaginationLink
+            onClick={() => handlePageChange(lastPage)}
+            isActive={currentPage === lastPage}
+          >
+            {lastPage}
+          </PaginationLink>
+        </PaginationItem>
+      )
+    }
+
+    return items
   }
 
   return (
@@ -55,8 +138,8 @@ export default function Servers({ servers }: ServersProps) {
                     Liste des serveurs
                   </CardTitle>
                   <CardDescription>
-                    {servers.length} serveur{servers.length > 1 ? 's' : ''} enregistré
-                    {servers.length > 1 ? 's' : ''}
+                    {pagination.total} serveur{pagination.total > 1 ? 's' : ''} enregistré
+                    {pagination.total > 1 ? 's' : ''}
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -92,6 +175,23 @@ export default function Servers({ servers }: ServersProps) {
                           </Button>
                         </div>
                       ))}
+                    </div>
+                  )}
+                  {servers.length > 0 && pagination.lastPage > 1 && (
+                    <div className="mt-6">
+                      <Pagination>
+                        <PaginationContent>
+                          <PaginationPrevious
+                            onClick={() => handlePageChange(pagination.currentPage - 1)}
+                            className={pagination.currentPage === 1 ? 'pointer-events-none opacity-50' : 'cursor-pointer'}
+                          />
+                          {renderPaginationItems()}
+                          <PaginationNext
+                            onClick={() => handlePageChange(pagination.currentPage + 1)}
+                            className={pagination.currentPage === pagination.lastPage ? 'pointer-events-none opacity-50' : 'cursor-pointer'}
+                          />
+                        </PaginationContent>
+                      </Pagination>
                     </div>
                   )}
                 </CardContent>
