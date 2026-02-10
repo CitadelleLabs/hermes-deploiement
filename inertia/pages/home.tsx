@@ -4,8 +4,8 @@ import { AppSidebar } from '~/components/app_sidebar'
 import { SidebarProvider, SidebarInset} from '~/components/ui/sidebar'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '~/components/ui/card'
 import { FolderIcon, ClockIcon } from 'lucide-react'
-import { Separator } from '~/components/ui/separator'
 import { DeployDialog } from '~/components/deploy_dialog'
+import { Header } from '~/components/header'
 
 type Plugin = {
   name: string
@@ -65,9 +65,7 @@ export default function Home({ plugins }: HomeProps) {
       <SidebarProvider>
         <AppSidebar />
         <SidebarInset>
-          <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4">
-            <Separator orientation="vertical" className="mr-2 h-4" />
-          </header>
+          <Header />
           <div className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
             <div className="max-w-6xl w-full mx-auto space-y-6">
               <div>
@@ -100,7 +98,7 @@ export default function Home({ plugins }: HomeProps) {
                         return (
                           <div
                             key={plugin.path}
-                            className="flex items-center justify-between p-3 border rounded-lg hover:bg-accent transition-colors"
+                            className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 p-3 border rounded-lg hover:bg-accent transition-colors"
                           >
                             <div className="flex items-center gap-3 flex-1">
                               <div className="flex-1">

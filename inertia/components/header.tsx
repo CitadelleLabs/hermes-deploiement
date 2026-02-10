@@ -1,16 +1,27 @@
-import { Card } from "./ui/card"
-import { Input } from "./ui/input"
+import { PanelLeftIcon } from 'lucide-react'
+import { Separator } from '~/components/ui/separator'
+import { Button } from '~/components/ui/button'
+import { useSidebar } from '~/components/ui/sidebar'
+import { useIsMobile } from '~/hooks/use-mobile'
 
 export function Header() {
-    return ( 
-        <div className="flex justify-center items-center py-8">
-            <Card className="w-full max-w-2xl px-8 py-6">
-                <div className="flex justify-between items-center">
-                    <h1 className="text-2xl font-bold">Hermes</h1>
-                    <p className="text-center"><Input placeholder="Search..." className="max-w-xs" /></p>
-                    <p className="text-gray-600">Citadelle Lab</p>
-                </div>
-            </Card>
-        </div>
-    )
+  const { toggleSidebar } = useSidebar()
+  const isMobile = useIsMobile()
+
+  return (
+    <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4">
+      {isMobile && (
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={toggleSidebar}
+          className="h-9 w-9"
+        >
+          <PanelLeftIcon className="h-5 w-5" />
+          <span className="sr-only">Toggle sidebar</span>
+        </Button>
+      )}
+      <Separator orientation="vertical" className="mr-2 h-4" />
+    </header>
+  )
 }
