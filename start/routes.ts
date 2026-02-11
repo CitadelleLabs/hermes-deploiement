@@ -22,9 +22,7 @@ router
   .group(() => {
     router.get('/', [PluginsController, 'home'])
     router.get('/servers', [ServersController, 'index'])
-    router.post('/servers', [ServersController, 'store'])
-    router.delete('/servers/:id', [ServersController, 'destroy'])
-    router.post('/servers/:id/deploy', [DeploymentController, 'deployPlugin'])
+    router.post('/servers/:identifier/deploy', [DeploymentController, 'deployPlugin'])
     router.post('/logout', [AuthController, 'logout'])
   })
   .use(middleware.auth())

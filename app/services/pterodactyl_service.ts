@@ -4,6 +4,11 @@ interface PullFileOptions {
   filename?: string
 }
 
+export interface ServerInfo {
+  name: string
+  identifier: string
+}
+
 export default class PterodactylService {
   /**
    * Déploie un fichier depuis une URL vers un serveur Pterodactyl
@@ -55,4 +60,36 @@ export default class PterodactylService {
       filename: pluginName,
     })
   }
+  
+  async getServers(
+    panelUrl: string,
+    apiKey: string,
+  ): Promise<ServerInfo[]> {
+    const endpoint = `${panelUrl}/api/application/servers`
+
+    const response = await fetch(endpoint, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        Accept: 'Application/vnd.pterodactyl.v1+json',
+        'Content-Type': 'application/json',
+      },
+    })
+
+    if (!response.ok) {
+      const errorText = await response.text()
+      console.error('Réponse erreur:', errorText)
+      throw new Error(
+        `Pterodactyl API error (${response.status}): ${errorText}`
+      )
+    }
+
+    const data = await response.json() as { data: Array<{ attributes: { name: string; identifier: string } }> }
+    
+    return data.data.map((server) => ({
+      name: server.attributes.name,
+      identifier: server.attributes.identifier,
+    }))
+  }
+
 }

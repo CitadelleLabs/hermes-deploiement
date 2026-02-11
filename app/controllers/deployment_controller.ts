@@ -16,9 +16,9 @@ export default class DeploymentController {
   async deployPlugin({ request, response, params }: HttpContext) {
     try {
       const { pluginPath } = request.only(['pluginPath'])
-      const serverId = params.id
+      const identifier = params.identifier
 
-      const server = await this.serversService.getServerById(serverId)
+      const server = await this.serversService.getServerByIdentifier(identifier)
       if (!server) {
         return response.notFound({ error: 'Serveur non trouvé' })
       }
@@ -33,7 +33,7 @@ export default class DeploymentController {
       await this.pterodactylService.deployPlugin(
         panelUrl,
         apiKey,
-        server.serverId,
+        server.identifier,
         signedUrl,
         pluginName
       )

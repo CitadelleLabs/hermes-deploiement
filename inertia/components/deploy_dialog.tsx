@@ -24,9 +24,8 @@ import {
 } from '~/components/ui/pagination'
 
 type Server = {
-  id: number
   name: string
-  serverId: string
+  identifier: string
 }
 
 type DeployDialogProps = {
@@ -40,12 +39,12 @@ export function DeployDialog({ pluginPath, pluginName, children }: DeployDialogP
   const servers = props.servers || []
   
   const [open, setOpen] = useState(false)
-  const [selectedServers, setSelectedServers] = useState<number[]>([])
+  const [selectedServers, setSelectedServers] = useState<string[]>([])
   const [deploying, setDeploying] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
   const [currentPage, setCurrentPage] = useState(1)
   const [deploymentStatus, setDeploymentStatus] = useState<{
-    [serverId: number]: 'pending' | 'success' | 'error'
+    [identifier: string]: 'pending' | 'success' | 'error'
   }>({})
 
   const SERVERS_PER_PAGE = 5
@@ -54,7 +53,7 @@ export function DeployDialog({ pluginPath, pluginName, children }: DeployDialogP
     const query = searchQuery.toLowerCase()
     return (
       server.name.toLowerCase().includes(query) ||
-      server.serverId.toLowerCase().includes(query)
+      server.identifier.toLowerCase().includes(query)
     )
   })
 
@@ -67,9 +66,9 @@ export function DeployDialog({ pluginPath, pluginName, children }: DeployDialogP
     setCurrentPage(1)
   }, [searchQuery])
 
-  const toggleServer = (serverId: number) => {
+  const toggleServer = (identifier: string) => {
     setSelectedServers((prev) =>
-      prev.includes(serverId) ? prev.filter((id) => id !== serverId) : [...prev, serverId]
+      prev.includes(identifier) ? prev.filter((id) => id !== identifier) : [...prev, identifier]
     )
   }
 
@@ -79,22 +78,22 @@ export function DeployDialog({ pluginPath, pluginName, children }: DeployDialogP
     setDeploying(true)
     setDeploymentStatus({})
 
-    for (const serverId of selectedServers) {
-      setDeploymentStatus((prev) => ({ ...prev, [serverId]: 'pending' }))
+    for (const identifier of selectedServers) {
+      setDeploymentStatus((prev) => ({ ...prev, [identifier]: 'pending' }))
 
       await new Promise<boolean>((resolve) => {
         router.post(
-          `/servers/${serverId}/deploy`,
+          `/servers/${identifier}/deploy`,
           { pluginPath },
           {
             preserveScroll: true,
             preserveState: true,
             onSuccess: () => {
-              setDeploymentStatus((prev) => ({ ...prev, [serverId]: 'success' }))
+              setDeploymentStatus((prev) => ({ ...prev, [identifier]: 'success' }))
               resolve(true)
             },
             onError: () => {
-              setDeploymentStatus((prev) => ({ ...prev, [serverId]: 'error' }))
+              setDeploymentStatus((prev) => ({ ...prev, [identifier]: 'error' }))
               resolve(false)
             },
           }
@@ -162,34 +161,34 @@ export function DeployDialog({ pluginPath, pluginName, children }: DeployDialogP
                   <div className="space-y-2">
                     {paginatedServers.map((server) => (
                 <div
-                  key={server.id}
+                  key={server.identifier}
                   className="flex items-center space-x-3 rounded-lg border p-3 hover:bg-accent transition-colors"
                 >
                   <Checkbox
-                    id={`server-${server.id}`}
-                    checked={selectedServers.includes(server.id)}
-                    onCheckedChange={() => toggleServer(server.id)}
+                    id={`server-${server.identifier}`}
+                    checked={selectedServers.includes(server.identifier)}
+                    onCheckedChange={() => toggleServer(server.identifier)}
                     disabled={deploying}
                   />
                   <label
-                    htmlFor={`server-${server.id}`}
+                    htmlFor={`server-${server.identifier}`}
                     className="flex-1 cursor-pointer select-none"
                   >
                     <div className="flex items-center gap-2">
                       <ServerIcon className="h-4 w-4 text-muted-foreground" />
                       <div>
                         <p className="font-medium">{server.name}</p>
-                        <p className="text-sm text-muted-foreground">ID: {server.serverId}</p>
+                        <p className="text-sm text-muted-foreground">ID: {server.identifier}</p>
                       </div>
                     </div>
                   </label>
-                  {deploymentStatus[server.id] === 'pending' && (
+                  {deploymentStatus[server.identifier] === 'pending' && (
                     <span className="text-xs text-blue-500">Déploiement...</span>
                   )}
-                  {deploymentStatus[server.id] === 'success' && (
+                  {deploymentStatus[server.identifier] === 'success' && (
                     <span className="text-xs text-green-500">✓ Réussi</span>
                   )}
-                  {deploymentStatus[server.id] === 'error' && (
+                  {deploymentStatus[server.identifier] === 'error' && (
                     <span className="text-xs text-red-500">✗ Erreur</span>
                   )}
                 </div>

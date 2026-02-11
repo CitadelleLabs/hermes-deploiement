@@ -1,30 +1,22 @@
-import Server from '#models/server'
+import PterodactylService, { type ServerInfo } from '#services/pterodactyl_service'
+import env from '#start/env'
 
 export default class ServersService {
-  async getAllServers(): Promise<Server[]> {
-    return await Server.all()
+  private pterodactylService: PterodactylService
+
+  constructor() {
+    this.pterodactylService = new PterodactylService()
   }
 
-  async getPaginatedServers(page: number = 1, perPage: number = 10) {
-    return await Server.query().paginate(page, perPage)
+  async getAllServers(): Promise<ServerInfo[]> {
+    return await this.pterodactylService.getServers(
+      env.get('PTERODACTYL_PANEL_URL'),
+      env.get('PTERODACTYL_API_KEY')
+    )
   }
 
-  async createServer(data: { name: string; serverId: string }): Promise<Server> {
-    const server = await Server.create({
-      name: data.name,
-      serverId: data.serverId,
-    })
-    return server
-  }
-
-  async getServerById(id: number): Promise<Server | null> {
-    return await Server.find(id)
-  }
-
-  async deleteServer(id: number): Promise<void> {
-    const server = await Server.find(id)
-    if (server) {
-      await server.delete()
-    }
+  async getServerByIdentifier(identifier: string): Promise<ServerInfo | null> {
+    const servers = await this.getAllServers()
+    return servers.find((server) => server.identifier === identifier) || null
   }
 }
