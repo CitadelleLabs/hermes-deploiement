@@ -23,7 +23,6 @@ import {
   SidebarMenuSubItem,
   SidebarRail,
 } from '~/components/ui/sidebar'
-import { useSidebarStateStore } from '~/stores/sidebar_state_store'
 import { DeployDialog } from '~/components/deploy_dialog'
 
 type Plugin = {
@@ -45,7 +44,6 @@ type User = {
 
 export function AppSidebar() {
   const { url, props } = usePage<{ plugins: PluginsByCategory; user: User }>()
-  const sidebarState = useSidebarStateStore()
   const pluginsByCategory = props.plugins || {}
   const user = props.user
 
@@ -107,8 +105,7 @@ export function AppSidebar() {
                 <Collapsible
                   key={category}
                   asChild
-                  open={sidebarState.isActive(`plugins-${category}`)}
-                  onOpenChange={() => sidebarState.toggleItem(`plugins-${category}`)}
+                  defaultOpen={false}
                   className="group/collapsible"
                 >
                   <SidebarMenuItem>
