@@ -10,7 +10,7 @@ export default class DeleteUser extends BaseCommand {
     startApp: true,
   }
 
-  @args.string({ description: 'Nom d\'utilisateur' })
+  @args.string({ description: "Nom d'utilisateur" })
   declare username: string
 
   async run() {
@@ -25,7 +25,7 @@ export default class DeleteUser extends BaseCommand {
       await user.delete()
       this.logger.success(`Utilisateur "${this.username}" supprimé avec succès`)
     } catch (error) {
-      this.logger.error('Erreur lors de la suppression de l\'utilisateur')
+      this.logger.error("Erreur lors de la suppression de l'utilisateur")
       this.logger.error(error.message)
     }
   }

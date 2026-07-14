@@ -21,6 +21,8 @@ router.post('/login', [AuthController, 'login'])
 router
   .group(() => {
     router.get('/', [PluginsController, 'home'])
+    router.get('/plugins/:id', [PluginsController, 'show'])
+    router.post('/plugins/:id/auto-update', [PluginsController, 'toggleAutoUpdate'])
     router.get('/servers', [ServersController, 'index'])
     router.post('/servers/:identifier/deploy', [DeploymentController, 'deployPlugin'])
     router.post('/logout', [AuthController, 'logout'])

@@ -28,7 +28,7 @@ export default function Login() {
   return (
     <>
       <Head title="Connexion" />
-      <div className="min-h-screen flex items-center justify-center bg-sand-2">
+      <div className="min-h-screen flex items-center justify-center bg-sand-2 dark:bg-zinc-950 text-foreground">
         <Card className="w-full max-w-md">
           <CardHeader>
             <div className="flex items-center justify-center mb-4">
@@ -78,7 +78,7 @@ export default function Login() {
 
               <Button
                 type="submit"
-                className="w-full bg-black hover:bg-black/90 text-white"
+                className="w-full"
                 disabled={processing}
               >
                 {processing ? 'Connexion...' : 'Se connecter'}

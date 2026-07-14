@@ -37,7 +37,7 @@ type DeployDialogProps = {
 export function DeployDialog({ pluginPath, pluginName, children }: DeployDialogProps) {
   const { props } = usePage<{ servers?: Server[] }>()
   const servers = props.servers || []
-  
+
   const [open, setOpen] = useState(false)
   const [selectedServers, setSelectedServers] = useState<string[]>([])
   const [deploying, setDeploying] = useState(false)
@@ -116,13 +116,13 @@ export function DeployDialog({ pluginPath, pluginName, children }: DeployDialogP
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         {children || (
-          <Button className='border hover:bg-black hover:text-white'>
+          <Button variant="outline">
             <RocketIcon className="h-4 w-4 mr-2" />
             Déployer
           </Button>
         )}
       </DialogTrigger>
-      <DialogContent className="max-w-md bg-white">
+      <DialogContent className="max-w-md">
         <DialogHeader>
           <DialogTitle>Déployer {pluginName}</DialogTitle>
           <DialogDescription>
@@ -160,38 +160,38 @@ export function DeployDialog({ pluginPath, pluginName, children }: DeployDialogP
                 <>
                   <div className="space-y-2">
                     {paginatedServers.map((server) => (
-                <div
-                  key={server.identifier}
-                  className="flex items-center space-x-3 rounded-lg border p-3 hover:bg-accent transition-colors"
-                >
-                  <Checkbox
-                    id={`server-${server.identifier}`}
-                    checked={selectedServers.includes(server.identifier)}
-                    onCheckedChange={() => toggleServer(server.identifier)}
-                    disabled={deploying}
-                  />
-                  <label
-                    htmlFor={`server-${server.identifier}`}
-                    className="flex-1 cursor-pointer select-none"
-                  >
-                    <div className="flex items-center gap-2">
-                      <ServerIcon className="h-4 w-4 text-muted-foreground" />
-                      <div>
-                        <p className="font-medium">{server.name}</p>
-                        <p className="text-sm text-muted-foreground">ID: {server.identifier}</p>
+                      <div
+                        key={server.identifier}
+                        className="flex items-center space-x-3 rounded-lg border p-3 hover:bg-accent transition-colors"
+                      >
+                        <Checkbox
+                          id={`server-${server.identifier}`}
+                          checked={selectedServers.includes(server.identifier)}
+                          onCheckedChange={() => toggleServer(server.identifier)}
+                          disabled={deploying}
+                        />
+                        <label
+                          htmlFor={`server-${server.identifier}`}
+                          className="flex-1 cursor-pointer select-none"
+                        >
+                          <div className="flex items-center gap-2">
+                            <ServerIcon className="h-4 w-4 text-muted-foreground" />
+                            <div>
+                              <p className="font-medium">{server.name}</p>
+                              <p className="text-sm text-muted-foreground">ID: {server.identifier}</p>
+                            </div>
+                          </div>
+                        </label>
+                        {deploymentStatus[server.identifier] === 'pending' && (
+                          <span className="text-xs text-blue-500">Déploiement...</span>
+                        )}
+                        {deploymentStatus[server.identifier] === 'success' && (
+                          <span className="text-xs text-green-500">✓ Réussi</span>
+                        )}
+                        {deploymentStatus[server.identifier] === 'error' && (
+                          <span className="text-xs text-red-500">✗ Erreur</span>
+                        )}
                       </div>
-                    </div>
-                  </label>
-                  {deploymentStatus[server.identifier] === 'pending' && (
-                    <span className="text-xs text-blue-500">Déploiement...</span>
-                  )}
-                  {deploymentStatus[server.identifier] === 'success' && (
-                    <span className="text-xs text-green-500">✓ Réussi</span>
-                  )}
-                  {deploymentStatus[server.identifier] === 'error' && (
-                    <span className="text-xs text-red-500">✗ Erreur</span>
-                  )}
-                </div>
                     ))}
                   </div>
                   {totalPages > 1 && (
@@ -230,13 +230,12 @@ export function DeployDialog({ pluginPath, pluginName, children }: DeployDialogP
         </div>
 
         <DialogFooter>
-          <Button type="button" variant="outline" onClick={() => setOpen(false)} className='hover:bg-black hover:text-white'>
+          <Button type="button" variant="outline" onClick={() => setOpen(false)}>
             Annuler
           </Button>
           <Button
             onClick={handleDeploy}
             disabled={selectedServers.length === 0 || deploying}
-            className='bg-black hover:bg-white hover:text-black hover:border-black hover:border text-white'
           >
             {deploying
               ? 'Déploiement en cours...'
