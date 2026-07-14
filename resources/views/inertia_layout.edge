@@ -28,18 +28,48 @@
   </style>
 
   <script src="https://cdn.tailwindcss.com"></script>
-
   <script>
     tailwind.config = {
+      darkMode: 'class',
       theme: {
         extend: {
           fontFamily: {
             sans: ['Instrument Sans', 'sans-serif'],
           },
           colors: {
-            primary: {
-              DEFAULT: '#ffffff',
+            background: 'var(--background)',
+            foreground: 'var(--foreground)',
+            card: {
+              DEFAULT: 'var(--card)',
+              foreground: 'var(--card-foreground)',
             },
+            popover: {
+              DEFAULT: 'var(--popover)',
+              foreground: 'var(--popover-foreground)',
+            },
+            primary: {
+              DEFAULT: 'var(--primary)',
+              foreground: 'var(--primary-foreground)',
+            },
+            secondary: {
+              DEFAULT: 'var(--secondary)',
+              foreground: 'var(--secondary-foreground)',
+            },
+            muted: {
+              DEFAULT: 'var(--muted)',
+              foreground: 'var(--muted-foreground)',
+            },
+            accent: {
+              DEFAULT: 'var(--accent)',
+              foreground: 'var(--accent-foreground)',
+            },
+            destructive: {
+              DEFAULT: 'var(--destructive)',
+              foreground: 'var(--destructive-foreground)',
+            },
+            border: 'var(--border)',
+            input: 'var(--input)',
+            ring: 'var(--ring)',
             sand: {
               1: 'var(--sand-1)',
               2: 'var(--sand-2)',
@@ -49,11 +79,16 @@
               6: 'var(--sand-6)',
               7: 'var(--sand-7)',
               8: 'var(--sand-8)',
-              9: 'v and import it herear(--sand-9)',
+              9: 'var(--sand-9)',
               10: 'var(--sand-10)',
               11: 'var(--sand-11)',
               12: 'var(--sand-12)',
             },
+          },
+          borderRadius: {
+            lg: 'var(--radius)',
+            md: 'calc(var(--radius) - 2px)',
+            sm: 'calc(var(--radius) - 4px)',
           },
         },
       },
@@ -66,7 +101,7 @@
   @vite(['inertia/app/app.tsx', `inertia/pages/${page.component}.tsx`])
 </head>
 
-<body class="min-h-screen w-screen font-sans">
+<body class="min-h-screen font-sans">
   @inertia()
 </body>
 

@@ -1,7 +1,7 @@
 import { inject } from '@adonisjs/core'
 import { HttpContext } from '@adonisjs/core/http'
 import PterodactylService from '#services/pterodactyl_service'
-import PluginsService from '#services/plugins_service'
+import PluginsService, { parsePluginFilename } from '#services/plugins_service'
 import ServersService from '#services/servers_service'
 import env from '#start/env'
 
@@ -11,7 +11,7 @@ export default class DeploymentController {
     private pterodactylService: PterodactylService,
     private pluginsService: PluginsService,
     private serversService: ServersService
-  ) {}
+  ) { }
 
   async deployPlugin({ request, response, params }: HttpContext) {
     try {
@@ -29,18 +29,22 @@ export default class DeploymentController {
       const signedUrl = await this.pluginsService.getSignedUrl(pluginPath)
 
       const pluginName = pluginPath.split('/').pop() || 'plugin.jar'
+      const parsed = parsePluginFilename(pluginName)
+      const pluginId = parsed.id
 
       await this.pterodactylService.deployPlugin(
         panelUrl,
         apiKey,
         server.identifier,
         signedUrl,
-        pluginName
+        pluginName,
+        pluginId
       )
 
-      return response.redirect('/')
+      return response.redirect().back()
     } catch (error) {
-      return response.redirect('/')
+      return response.redirect().back()
     }
   }
 }
+

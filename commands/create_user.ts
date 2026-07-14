@@ -10,10 +10,10 @@ export default class CreateUser extends BaseCommand {
     startApp: true,
   }
 
-  @args.string({ description: 'Nom d\'utilisateur' })
+  @args.string({ description: "Nom d'utilisateur" })
   declare username: string
 
-  @args.string({ description: 'Mot de passe de l\'utilisateur' })
+  @args.string({ description: "Mot de passe de l'utilisateur" })
   declare password: string
 
   async run() {
@@ -25,7 +25,7 @@ export default class CreateUser extends BaseCommand {
 
       this.logger.success(`Utilisateur créé avec succès : ${user.username}`)
     } catch (error) {
-      this.logger.error('Erreur lors de la création de l\'utilisateur')
+      this.logger.error("Erreur lors de la création de l'utilisateur")
       this.logger.error(error.message)
     }
   }

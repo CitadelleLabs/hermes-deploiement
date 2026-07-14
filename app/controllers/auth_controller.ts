@@ -6,7 +6,7 @@ export default class AuthController {
     if (await auth.check()) {
       return response.redirect('/')
     }
-    
+
     return inertia.render('auth/login')
   }
 
@@ -19,8 +19,8 @@ export default class AuthController {
 
       return response.redirect('/')
     } catch {
-      session.flash('errors', { 
-        username: 'Nom d\'utilisateur ou mot de passe incorrect' 
+      session.flash('errors', {
+        username: "Nom d'utilisateur ou mot de passe incorrect",
       })
       return response.redirect().back()
     }
