@@ -48,17 +48,3 @@ router.use([
 export const middleware = router.named({
   auth: () => import('#middleware/auth_middleware')
 })
-
-import AutoUpdateService from '#services/auto_update_service'
-
-const autoUpdateService = new AutoUpdateService()
-
-const intervalMinutes = parseInt(process.env.AUTO_UPDATE_INTERVAL_MINUTES || '5', 10)
-const intervalMs = intervalMinutes * 60 * 1000
-
-setTimeout(() => {
-  autoUpdateService.run()
-  setInterval(() => {
-    autoUpdateService.run()
-  }, intervalMs)
-}, 10000)

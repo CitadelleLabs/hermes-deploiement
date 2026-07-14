@@ -1,3 +1,5 @@
+import cron, { ScheduledTask } from 'node-cron'
+import logger from '@adonisjs/core/services/logger'
 import PterodactylService from '#services/pterodactyl_service'
 import PluginsService from '#services/plugins_service'
 import ServersService from '#services/servers_service'
@@ -8,6 +10,26 @@ export default class AutoUpdateService {
     private pterodactylService = new PterodactylService()
     private pluginsService = new PluginsService()
     private serversService = new ServersService()
+    private task: ScheduledTask | null = null
+
+    schedule(expression: string) {
+        this.run().catch((err) => {
+            logger.error({ err }, '[AutoUpdate] Initial run error')
+        })
+
+        this.task = cron.schedule(expression, () => {
+            this.run().catch((err) => {
+                logger.error({ err }, '[AutoUpdate] Auto-update cron job failed')
+            })
+        })
+    }
+
+    stopSchedule() {
+        if (this.task) {
+            this.task.stop()
+            this.task = null
+        }
+    }
 
     async run() {
         try {
@@ -63,7 +85,7 @@ export default class AutoUpdateService {
                         if (foundJar) {
                             const installedFileName = foundJar.attributes.name
                             if (installedFileName !== latestFileName) {
-                                console.log(`[AutoUpdate] Upgrading ${pluginId} on server ${server.name} (${installedFileName} -> ${latestFileName})`)
+                                logger.info(`[AutoUpdate] Upgrading ${pluginId} on server ${server.name} (${installedFileName} -> ${latestFileName})`)
 
                                 const signedUrl = await this.pluginsService.getSignedUrl(latestPath)
 
@@ -78,12 +100,12 @@ export default class AutoUpdateService {
                             }
                         }
                     } catch (serverErr) {
-                        console.error(`[AutoUpdate] Error processing server ${server.identifier} for plugin ${pluginId}:`, serverErr)
+                        logger.error({ err: serverErr }, `[AutoUpdate] Error processing server ${server.identifier} for plugin ${pluginId}`)
                     }
                 }
             }
         } catch (err) {
-            console.error('[AutoUpdate] Error running scheduler cycle:', err)
+            logger.error({ err }, '[AutoUpdate] Error running scheduler cycle')
         }
     }
 }
