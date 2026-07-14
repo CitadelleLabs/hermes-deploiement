@@ -38,7 +38,6 @@ export default function Home({ plugins }: HomeProps) {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(categoryKeys[0] || null)
   const [searchQuery, setSearchQuery] = useState('')
 
-  // Sync selectedCategory when categoryKeys changes
   useEffect(() => {
     if (categoryKeys.length > 0 && (!selectedCategory || !categoryKeys.includes(selectedCategory))) {
       setSelectedCategory(categoryKeys[0])
