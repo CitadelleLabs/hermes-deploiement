@@ -43,4 +43,11 @@ export default await Env.create(new URL('../', import.meta.url), {
   */
   PTERODACTYL_PANEL_URL: Env.schema.string({ format: 'url' }),
   PTERODACTYL_API_KEY: Env.schema.string(),
+
+  /*
+  |----------------------------------------------------------
+  | Variables for Discord Webhooks
+  |----------------------------------------------------------
+  */
+  DISCORD_WEBHOOK_URL: Env.schema.string.optional({ format: 'url' }),
 })
