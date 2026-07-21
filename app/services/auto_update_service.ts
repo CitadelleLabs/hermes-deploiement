@@ -4,6 +4,7 @@ import PterodactylService from '#services/pterodactyl_service'
 import PluginsService from '#services/plugins_service'
 import ServersService from '#services/servers_service'
 import PluginAutoUpdate from '#models/plugin_auto_update'
+import DiscordService from '#services/discord_service'
 import env from '#start/env'
 
 export default class AutoUpdateService {
@@ -97,6 +98,12 @@ export default class AutoUpdateService {
                                     latestFileName,
                                     pluginId
                                 )
+
+                                await DiscordService.sendDeploymentNotification({
+                                    serverName: server.name,
+                                    pluginName: latestFileName,
+                                    isAutoUpdate: true,
+                                })
                             }
                         }
                     } catch (serverErr) {

@@ -3,6 +3,7 @@ import { HttpContext } from '@adonisjs/core/http'
 import PterodactylService from '#services/pterodactyl_service'
 import PluginsService, { parsePluginFilename } from '#services/plugins_service'
 import ServersService from '#services/servers_service'
+import DiscordService from '#services/discord_service'
 import env from '#start/env'
 
 @inject()
@@ -40,6 +41,12 @@ export default class DeploymentController {
         pluginName,
         pluginId
       )
+
+      await DiscordService.sendDeploymentNotification({
+        serverName: server.name,
+        pluginName: pluginName,
+        isAutoUpdate: false,
+      })
 
       return response.redirect().back()
     } catch (error) {
