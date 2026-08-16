@@ -31,8 +31,8 @@ export default function Login() {
       <div className="min-h-screen flex items-center justify-center bg-sand-2 dark:bg-zinc-950 text-foreground">
         <Card className="w-full max-w-md">
           <CardHeader>
-            <div className="flex items-center justify-center mb-4">
-              <img src="/logo.png" alt="Hermes Logo" className="h-12" />
+            <div className="flex items-center justify-center">
+              <img src="/logo.png" alt="Hermes Logo" className="h-16" />
             </div>
             <CardTitle className="text-center text-2xl">Bienvenue sur Hermes</CardTitle>
             <CardDescription className="text-center">

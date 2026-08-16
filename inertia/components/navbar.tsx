@@ -49,8 +49,7 @@ export function Navbar() {
             <div className="max-w-6xl w-full mx-auto px-4 md:px-8 flex items-center justify-between h-16">
                 <div className="flex items-center gap-6">
                     <Link href="/" className="flex items-center gap-2 font-bold text-lg select-none">
-                        <img src="/logo.png" alt="Logo" className="h-6 w-auto object-contain" />
-                        <span>Hermes</span>
+                        <img src="/logo.png" alt="Logo" className="h-9 w-auto object-contain" />
                     </Link>
                     <nav className="flex items-center gap-6 text-sm font-medium">
                         <Link
