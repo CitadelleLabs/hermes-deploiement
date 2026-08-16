@@ -116,7 +116,7 @@ export default function Show({ plugin, isAutoUpdateEnabled }: ShowProps) {
                                             </span>
                                         </div>
                                         <div>
-                                            <span className="text-xs text-muted-foreground block uppercase font-medium">Mis à jour le</span>
+                                            <span className="text-xs text-muted-foreground block uppercase font-medium">Dernière mise à jour</span>
                                             <span className="text-base font-semibold">{formatDate(plugin.latestVersion.lastModified)}</span>
                                         </div>
                                     </CardContent>

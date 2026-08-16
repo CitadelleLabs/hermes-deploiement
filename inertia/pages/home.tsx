@@ -68,7 +68,7 @@ export default function Home({ plugins }: HomeProps) {
           <div className="max-w-6xl w-full mx-auto space-y-8">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
               <div>
-                <h2 className="text-2xl font-bold mb-2">Liste des Plugins Citadelle</h2>
+                <h2 className="text-2xl font-bold mb-2">Liste des Plugins</h2>
                 <p className="text-muted-foreground">
                   Gérez et déployez les versions des plugins Minecraft sur vos serveurs Pterodactyl.
                 </p>

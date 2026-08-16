@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title inertia>Hermes - Citadelle Lab</title>
+  <title inertia>Hermes</title>
 
   <link rel="preconnect" href="https://fonts.bunny.net">
   <link href="https://fonts.bunny.net/css?family=instrument-sans:400,400i,500,500i,600,600i,700,700i" rel="stylesheet" />
@@ -26,74 +26,6 @@
       --sand-12: #21201c;
     }
   </style>
-
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      darkMode: 'class',
-      theme: {
-        extend: {
-          fontFamily: {
-            sans: ['Instrument Sans', 'sans-serif'],
-          },
-          colors: {
-            background: 'var(--background)',
-            foreground: 'var(--foreground)',
-            card: {
-              DEFAULT: 'var(--card)',
-              foreground: 'var(--card-foreground)',
-            },
-            popover: {
-              DEFAULT: 'var(--popover)',
-              foreground: 'var(--popover-foreground)',
-            },
-            primary: {
-              DEFAULT: 'var(--primary)',
-              foreground: 'var(--primary-foreground)',
-            },
-            secondary: {
-              DEFAULT: 'var(--secondary)',
-              foreground: 'var(--secondary-foreground)',
-            },
-            muted: {
-              DEFAULT: 'var(--muted)',
-              foreground: 'var(--muted-foreground)',
-            },
-            accent: {
-              DEFAULT: 'var(--accent)',
-              foreground: 'var(--accent-foreground)',
-            },
-            destructive: {
-              DEFAULT: 'var(--destructive)',
-              foreground: 'var(--destructive-foreground)',
-            },
-            border: 'var(--border)',
-            input: 'var(--input)',
-            ring: 'var(--ring)',
-            sand: {
-              1: 'var(--sand-1)',
-              2: 'var(--sand-2)',
-              3: 'var(--sand-3)',
-              4: 'var(--sand-4)',
-              5: 'var(--sand-5)',
-              6: 'var(--sand-6)',
-              7: 'var(--sand-7)',
-              8: 'var(--sand-8)',
-              9: 'var(--sand-9)',
-              10: 'var(--sand-10)',
-              11: 'var(--sand-11)',
-              12: 'var(--sand-12)',
-            },
-          },
-          borderRadius: {
-            lg: 'var(--radius)',
-            md: 'calc(var(--radius) - 2px)',
-            sm: 'calc(var(--radius) - 4px)',
-          },
-        },
-      },
-    }
-  </script>
 
   @stack('dumper')
   @viteReactRefresh()
