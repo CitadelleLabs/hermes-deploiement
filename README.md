@@ -68,8 +68,7 @@ npm start
 ## Utilisation
 
 1. **Connexion** : Accédez à `/login` avec vos identifiants
-2. **Ajout de serveurs** : Configurez vos serveurs Pterodactyl dans l'interface
-3. **Déploiement** : Cliquez sur un plugin pour le déployer sur un ou plusieurs serveurs
+2. **Déploiement** : Cliquez sur un plugin pour le déployer sur un ou plusieurs serveurs
 
 ## Commandes utiles
 
@@ -94,3 +93,7 @@ node ace migration:fresh
 - **Styling** : TailwindCSS + shadcn/ui
 - **Base de données** : SQLite
 - **Stockage** : Cloudflare R2
+
+## Licence
+
+Ce projet est sous licence [MIT](LICENSE).
