@@ -53,6 +53,7 @@ export default class DiscordService {
 
         const body = {
             username: 'Hermes',
+            avatar_url: `${env.get('APP_URL')}/logo.png`,
             flags: 32768,
             components: discordPayload
         }
