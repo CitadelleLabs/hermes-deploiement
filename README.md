@@ -2,6 +2,8 @@
 
 Service de déploiement centralisé de plugins Minecraft multi-serveurs.
 
+<img width="1324" height="750" alt="image" src="https://github.com/user-attachments/assets/2b120155-f2d0-41b2-b205-0ca75372ead9" />
+
 ## Prérequis
 
 - Node.js (v20+)
