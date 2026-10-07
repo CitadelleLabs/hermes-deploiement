@@ -1,17 +1,17 @@
-import PterodactylService, { type ServerInfo } from '#services/pterodactyl_service'
+import PelicanService, { type ServerInfo } from '#services/pelican_service'
 import env from '#start/env'
 
 export default class ServersService {
-  private pterodactylService: PterodactylService
+  private pelicanService: PelicanService
 
   constructor() {
-    this.pterodactylService = new PterodactylService()
+    this.pelicanService = new PelicanService()
   }
 
   async getAllServers(): Promise<ServerInfo[]> {
-    return await this.pterodactylService.getServers(
-      env.get('PTERODACTYL_PANEL_URL'),
-      env.get('PTERODACTYL_API_KEY')
+    return await this.pelicanService.getServers(
+      env.get('PELICAN_PANEL_URL'),
+      env.get('PELICAN_APPLICATION_API_KEY')
     )
   }
 

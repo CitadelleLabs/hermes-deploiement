@@ -9,7 +9,7 @@ export interface ServerInfo {
   identifier: string
 }
 
-export interface PterodactylFileObject {
+export interface PelicanFileObject {
   attributes: {
     name: string
     mode: string
@@ -22,23 +22,23 @@ export interface PterodactylFileObject {
   }
 }
 
-export default class PterodactylService {
+export default class PelicanService {
   /**
-   * Déploie un fichier depuis une URL vers un serveur Pterodactyl
+   * Déploie un fichier depuis une URL vers un serveur Pelican
    */
   async pullFile(
     panelUrl: string,
-    apiKey: string,
+    clientApiKey: string,
     serverId: string,
     options: PullFileOptions
   ): Promise<void> {
-    const endpoint = `${panelUrl}/api/client/servers/${serverId}/files/pull`
+    const endpoint = `${panelUrl.replace(/\/+$/, '')}/api/client/servers/${serverId}/files/pull`
 
     const response = await fetch(endpoint, {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${apiKey}`,
-        'Accept': 'Application/vnd.pterodactyl.v1+json',
+        'Authorization': `Bearer ${clientApiKey}`,
+        'Accept': 'application/json',
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
@@ -51,27 +51,27 @@ export default class PterodactylService {
     if (!response.ok) {
       const errorText = await response.text()
       console.error('Réponse erreur:', errorText)
-      throw new Error(`Pterodactyl API error (${response.status}): ${errorText}`)
+      throw new Error(`Pelican API error (${response.status}): ${errorText}`)
     }
   }
 
   /**
-   * Liste les fichiers d'un répertoire sur un serveur Pterodactyl
+   * Liste les fichiers d'un répertoire sur un serveur Pelican
    */
   async listFiles(
     panelUrl: string,
-    apiKey: string,
+    clientApiKey: string,
     serverId: string,
     directory: string
-  ): Promise<PterodactylFileObject[]> {
+  ): Promise<PelicanFileObject[]> {
     const encodedDir = encodeURIComponent(directory)
-    const endpoint = `${panelUrl}/api/client/servers/${serverId}/files/list?directory=${encodedDir}`
+    const endpoint = `${panelUrl.replace(/\/+$/, '')}/api/client/servers/${serverId}/files/list?directory=${encodedDir}`
 
     const response = await fetch(endpoint, {
       method: 'GET',
       headers: {
-        'Authorization': `Bearer ${apiKey}`,
-        'Accept': 'Application/vnd.pterodactyl.v1+json',
+        'Authorization': `Bearer ${clientApiKey}`,
+        'Accept': 'application/json',
         'Content-Type': 'application/json',
       },
     })
@@ -79,30 +79,30 @@ export default class PterodactylService {
     if (!response.ok) {
       const errorText = await response.text()
       console.error('Réponse erreur listFiles:', errorText)
-      throw new Error(`Pterodactyl listFiles error (${response.status}): ${errorText}`)
+      throw new Error(`Pelican listFiles error (${response.status}): ${errorText}`)
     }
 
-    const data = (await response.json()) as { data: PterodactylFileObject[] }
+    const data = (await response.json()) as { data: PelicanFileObject[] }
     return data.data || []
   }
 
   /**
-   * Supprime un ou plusieurs fichiers sur un serveur Pterodactyl
+   * Supprime un ou plusieurs fichiers sur un serveur Pelican
    */
   async deleteFiles(
     panelUrl: string,
-    apiKey: string,
+    clientApiKey: string,
     serverId: string,
     directory: string,
     files: string[]
   ): Promise<void> {
-    const endpoint = `${panelUrl}/api/client/servers/${serverId}/files/delete`
+    const endpoint = `${panelUrl.replace(/\/+$/, '')}/api/client/servers/${serverId}/files/delete`
 
     const response = await fetch(endpoint, {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${apiKey}`,
-        'Accept': 'Application/vnd.pterodactyl.v1+json',
+        'Authorization': `Bearer ${clientApiKey}`,
+        'Accept': 'application/json',
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
@@ -114,23 +114,23 @@ export default class PterodactylService {
     if (!response.ok) {
       const errorText = await response.text()
       console.error('Réponse erreur deleteFiles:', errorText)
-      throw new Error(`Pterodactyl deleteFiles error (${response.status}): ${errorText}`)
+      throw new Error(`Pelican deleteFiles error (${response.status}): ${errorText}`)
     }
   }
 
   /**
-   * Déploie un plugin vers un serveur Pterodactyl en supprimant l'ancienne version
+   * Déploie un plugin vers un serveur Pelican en supprimant l'ancienne version
    */
   async deployPlugin(
     panelUrl: string,
-    apiKey: string,
+    clientApiKey: string,
     serverId: string,
     pluginUrl: string,
     pluginName: string,
     pluginId: string
   ): Promise<void> {
     try {
-      const fileList = await this.listFiles(panelUrl, apiKey, serverId, '/plugins')
+      const fileList = await this.listFiles(panelUrl, clientApiKey, serverId, '/plugins')
 
       const escapedId = pluginId.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
       const regexNewFormat = new RegExp(`^${escapedId}-\\d+(?:\\.\\d+)*-.*\\.jar$`)
@@ -148,27 +148,27 @@ export default class PterodactylService {
         .map((file) => file.attributes.name)
 
       if (filesToDelete.length > 0) {
-        await this.deleteFiles(panelUrl, apiKey, serverId, '/plugins', filesToDelete)
+        await this.deleteFiles(panelUrl, clientApiKey, serverId, '/plugins', filesToDelete)
       }
     } catch (e) {
-      console.error('Erreur lors du nettoyage des anciens plugins sur Pterodactyl:', e)
+      console.error('Erreur lors du nettoyage des anciens plugins sur Pelican:', e)
     }
 
-    await this.pullFile(panelUrl, apiKey, serverId, {
+    await this.pullFile(panelUrl, clientApiKey, serverId, {
       url: pluginUrl,
       directory: '/plugins',
       filename: pluginName,
     })
   }
 
-  async getServers(panelUrl: string, apiKey: string): Promise<ServerInfo[]> {
-    const endpoint = `${panelUrl}/api/application/servers`
+  async getServers(panelUrl: string, applicationApiKey: string): Promise<ServerInfo[]> {
+    const endpoint = `${panelUrl.replace(/\/+$/, '')}/api/application/servers`
 
     const response = await fetch(endpoint, {
       method: 'GET',
       headers: {
-        'Authorization': `Bearer ${apiKey}`,
-        'Accept': 'Application/vnd.pterodactyl.v1+json',
+        'Authorization': `Bearer ${applicationApiKey}`,
+        'Accept': 'application/json',
         'Content-Type': 'application/json',
       },
     })
@@ -176,7 +176,7 @@ export default class PterodactylService {
     if (!response.ok) {
       const errorText = await response.text()
       console.error('Réponse erreur:', errorText)
-      throw new Error(`Pterodactyl API error (${response.status}): ${errorText}`)
+      throw new Error(`Pelican API error (${response.status}): ${errorText}`)
     }
 
     const data = (await response.json()) as {
@@ -189,4 +189,3 @@ export default class PterodactylService {
     }))
   }
 }
-

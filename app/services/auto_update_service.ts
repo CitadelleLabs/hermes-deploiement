@@ -1,6 +1,6 @@
 import cron, { ScheduledTask } from 'node-cron'
 import logger from '@adonisjs/core/services/logger'
-import PterodactylService from '#services/pterodactyl_service'
+import PelicanService from '#services/pelican_service'
 import PluginsService from '#services/plugins_service'
 import ServersService from '#services/servers_service'
 import PluginAutoUpdate from '#models/plugin_auto_update'
@@ -8,7 +8,7 @@ import DiscordService from '#services/discord_service'
 import env from '#start/env'
 
 export default class AutoUpdateService {
-    private pterodactylService = new PterodactylService()
+    private pelicanService = new PelicanService()
     private pluginsService = new PluginsService()
     private serversService = new ServersService()
     private task: ScheduledTask | null = null
@@ -48,8 +48,8 @@ export default class AutoUpdateService {
             }
 
             const servers = await this.serversService.getAllServers()
-            const panelUrl = env.get('PTERODACTYL_PANEL_URL')
-            const apiKey = env.get('PTERODACTYL_API_KEY')
+            const panelUrl = env.get('PELICAN_PANEL_URL')
+            const clientApiKey = env.get('PELICAN_CLIENT_API_KEY')
 
             for (const autoUpdate of activeAutoUpdates) {
                 const pluginId = autoUpdate.pluginId
@@ -64,9 +64,9 @@ export default class AutoUpdateService {
 
                 for (const server of servers) {
                     try {
-                        const fileList = await this.pterodactylService.listFiles(
+                        const fileList = await this.pelicanService.listFiles(
                             panelUrl,
-                            apiKey,
+                            clientApiKey,
                             server.identifier,
                             '/plugins'
                         )
@@ -90,9 +90,9 @@ export default class AutoUpdateService {
 
                                 const signedUrl = await this.pluginsService.getSignedUrl(latestPath)
 
-                                await this.pterodactylService.deployPlugin(
+                                await this.pelicanService.deployPlugin(
                                     panelUrl,
-                                    apiKey,
+                                    clientApiKey,
                                     server.identifier,
                                     signedUrl,
                                     latestFileName,

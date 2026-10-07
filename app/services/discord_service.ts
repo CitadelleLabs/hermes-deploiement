@@ -41,7 +41,7 @@ export default class DiscordService {
                     },
                     {
                         type: 10,
-                        content: `-# Déployé sur ${env.get('PTERODACTYL_PANEL_URL')}`
+                        content: `-# Déployé sur ${env.get('PELICAN_PANEL_URL')}`
                     }
                 ]
             }

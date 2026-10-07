@@ -9,7 +9,7 @@ Service de déploiement centralisé de plugins Minecraft multi-serveurs.
 - Node.js (v20+)
 - npm ou yarn
 - Un bucket Cloudflare R2 (stockage des plugins)
-- Un panel Pterodactyl
+- Un panel Pelican
 
 ## Installation
 
@@ -90,10 +90,23 @@ R2_SECRET=votre_secret_r2
 R2_BUCKET=nom_du_bucket
 R2_ENDPOINT=lien_du_bucket
 
-# Pterodactyl
-PTERODACTYL_PANEL_URL=lien_pterodactyl
-PTERODACTYL_API_KEY=api_key_pterodactyl
+# Pelican
+PELICAN_PANEL_URL=https://dash.citadellelab.fr
+PELICAN_APPLICATION_API_KEY=votre_token_application
+PELICAN_CLIENT_API_KEY=votre_token_client
 ```
+
+`PELICAN_PANEL_URL` est l'URL du panel, sans suffixe `/api`.
+Les deux clés sont des tokens bruts, sans le préfixe `Bearer` : Hermes l'ajoute aux requêtes.
+
+- `PELICAN_APPLICATION_API_KEY` : liste des serveurs via `GET /api/application/servers`.
+- `PELICAN_CLIENT_API_KEY` : opérations sur les fichiers, dont le déploiement depuis une URL R2 via `POST /api/client/servers/{server}/files/pull`, ainsi que la liste et la suppression des anciennes versions. Cette clé doit avoir accès aux serveurs ciblés et les permissions nécessaires sur leurs fichiers.
+
+Les déploiements manuels et les mises à jour automatiques utilisent tous les deux la clé client.
+L'endpoint `GET /api/client/servers/{server}/files/contents` permet de lire un fichier ; il n'est pas utilisé pour envoyer les plugins.
+Voir les [routes officielles de l'API client Pelican](https://github.com/pelican-dev/panel/blob/main/routes/api-client.php).
+
+Lors d'une migration depuis Pterodactyl, remplacez `PTERODACTYL_PANEL_URL` et `PTERODACTYL_API_KEY` par les trois variables Pelican ci-dessus.
 
 ```bash
 # Générer l'APP_KEY

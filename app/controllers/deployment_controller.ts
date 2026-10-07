@@ -1,6 +1,6 @@
 import { inject } from '@adonisjs/core'
 import { HttpContext } from '@adonisjs/core/http'
-import PterodactylService from '#services/pterodactyl_service'
+import PelicanService from '#services/pelican_service'
 import PluginsService, { parsePluginFilename } from '#services/plugins_service'
 import ServersService from '#services/servers_service'
 import DiscordService from '#services/discord_service'
@@ -9,7 +9,7 @@ import env from '#start/env'
 @inject()
 export default class DeploymentController {
   constructor(
-    private pterodactylService: PterodactylService,
+    private pelicanService: PelicanService,
     private pluginsService: PluginsService,
     private serversService: ServersService
   ) { }
@@ -24,8 +24,8 @@ export default class DeploymentController {
         return response.notFound({ error: 'Serveur non trouvé' })
       }
 
-      const panelUrl = env.get('PTERODACTYL_PANEL_URL')
-      const apiKey = env.get('PTERODACTYL_API_KEY')
+      const panelUrl = env.get('PELICAN_PANEL_URL')
+      const clientApiKey = env.get('PELICAN_CLIENT_API_KEY')
 
       const signedUrl = await this.pluginsService.getSignedUrl(pluginPath)
 
@@ -33,9 +33,9 @@ export default class DeploymentController {
       const parsed = parsePluginFilename(pluginName)
       const pluginId = parsed.id
 
-      await this.pterodactylService.deployPlugin(
+      await this.pelicanService.deployPlugin(
         panelUrl,
-        apiKey,
+        clientApiKey,
         server.identifier,
         signedUrl,
         pluginName,

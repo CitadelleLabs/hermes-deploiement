@@ -39,11 +39,12 @@ export default await Env.create(new URL('../', import.meta.url), {
 
   /*
   |----------------------------------------------------------
-  | Variables for configuring Pterodactyl
+  | Variables for configuring Pelican
   |----------------------------------------------------------
   */
-  PTERODACTYL_PANEL_URL: Env.schema.string({ format: 'url' }),
-  PTERODACTYL_API_KEY: Env.schema.string(),
+  PELICAN_PANEL_URL: Env.schema.string({ format: 'url' }),
+  PELICAN_APPLICATION_API_KEY: Env.schema.string(),
+  PELICAN_CLIENT_API_KEY: Env.schema.string(),
 
   /*
   |----------------------------------------------------------
