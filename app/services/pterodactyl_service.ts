@@ -4,7 +4,7 @@ interface PullFileOptions {
   filename?: string
 }
 
-export interface ServerInfo {
+export type ServerInfo = {
   name: string
   identifier: string
 }

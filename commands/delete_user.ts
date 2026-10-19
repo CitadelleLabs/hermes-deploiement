@@ -26,7 +26,7 @@ export default class DeleteUser extends BaseCommand {
       this.logger.success(`Utilisateur "${this.username}" supprimé avec succès`)
     } catch (error) {
       this.logger.error("Erreur lors de la suppression de l'utilisateur")
-      this.logger.error(error.message)
+      this.logger.error(error instanceof Error ? error.message : String(error))
     }
   }
 }

@@ -1,7 +1,7 @@
 import drive from '@adonisjs/drive/services/main'
 import PluginAutoUpdate from '#models/plugin_auto_update'
 
-export interface PluginVersion {
+export type PluginVersion = {
   fileName: string
   path: string
   version: string
@@ -11,7 +11,7 @@ export interface PluginVersion {
   url: string
 }
 
-export interface PluginProfile {
+export type PluginProfile = {
   id: string
   name: string
   category: string
@@ -20,9 +20,7 @@ export interface PluginProfile {
   isAutoUpdateEnabled: boolean
 }
 
-export interface PluginsByCategory {
-  [category: string]: PluginProfile[]
-}
+export type PluginsByCategory = Record<string, PluginProfile[]>
 
 export function parsePluginFilename(filename: string): { id: string; version: string; commit: string } {
   const match = filename.match(/^(.*?)-(\d+(?:\.\d+)*)(?:-(.*))?\.jar$/)

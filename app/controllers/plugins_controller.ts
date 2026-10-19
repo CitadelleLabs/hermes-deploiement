@@ -8,7 +8,7 @@ export default class PluginsController {
   constructor(private pluginsService: PluginsService) { }
 
   async home({ inertia }: HttpContext) {
-    return inertia.render('home')
+    return inertia.render('home', {})
   }
 
   async show({ params, inertia, response }: HttpContext) {
