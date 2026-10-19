@@ -1,7 +1,5 @@
-/// <reference path="../../adonisrc.ts" />
-/// <reference path="../../config/inertia.ts" />
-
-import '../css/app.css';
+import './css/app.css';
+import type { ComponentType } from 'react'
 import { hydrateRoot } from 'react-dom/client'
 import { createInertiaApp } from '@inertiajs/react';
 import { resolvePageComponent } from '@adonisjs/inertia/helpers'
@@ -15,8 +13,8 @@ createInertiaApp({
 
   resolve: (name) => {
     return resolvePageComponent(
-      `../pages/${name}.tsx`,
-      import.meta.glob('../pages/**/*.tsx'),
+      `./pages/${name}.tsx`,
+      import.meta.glob<ComponentType<any>>('./pages/**/*.tsx'),
     )
   },
 

@@ -7,7 +7,7 @@ export default class AuthController {
       return response.redirect('/')
     }
 
-    return inertia.render('auth/login')
+    return inertia.render('auth/login', {})
   }
 
   async login({ request, response, auth, session }: HttpContext) {

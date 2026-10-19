@@ -27,7 +27,7 @@ export default class TestDiscord extends BaseCommand {
             this.logger.success('Message Discord de test envoyé (Auto-Update)')
         } catch (error) {
             this.logger.error("Erreur lors de l'envoi du message de test")
-            this.logger.error(error.message)
+            this.logger.error(error instanceof Error ? error.message : String(error))
         }
     }
 }

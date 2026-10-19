@@ -26,7 +26,7 @@ export default class CreateUser extends BaseCommand {
       this.logger.success(`Utilisateur créé avec succès : ${user.username}`)
     } catch (error) {
       this.logger.error("Erreur lors de la création de l'utilisateur")
-      this.logger.error(error.message)
+      this.logger.error(error instanceof Error ? error.message : String(error))
     }
   }
 }
